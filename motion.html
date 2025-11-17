@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Motion — Agiat Tri Farizky</title>
+  <link rel="icon" href="icons/favicon.ico">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* === GRID STYLING === */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+      padding: 40px;
+      justify-items: center;
+    }
+
+    /* === CARD === */
+    .portfolio-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      background: #000;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      width: 100%;
+    }
+
+    .portfolio-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    /* === THUMBNAIL === */
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+      border-radius: 14px;
+    }
+
+    .portfolio-item:hover img {
+      transform: scale(1.06);
+    }
+
+    /* === PLAY ICON === */
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      color: #fff;
+      font-size: 48px;
+    }
+
+    .portfolio-item:hover .play-overlay {
+      opacity: 1;
+    }
+
+    /* === ASPECT RATIO CONTROL === */
+    .landscape {
+      aspect-ratio: 16 / 9;
+    }
+
+    .portrait {
+      aspect-ratio: 9 / 16;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      .portfolio-grid {
+        gap: 16px;
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <h2><a href="index.html">AGIAT <span>TRI FARIZKY</span></a></h2>
+    </div>
+    <ul class="nav-links">
+      <li><a href="about.html">ABOUT ME</a></li>
+      <li><a href="contact.html">CONTACT ME</a></li>
+      <li><a href="portofolio.html">PORTOFOLIO</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="lang-switch">
+        <button id="langID">IN</button>
+        <button id="langEN">EN</button>
+      </div>
+      <div class="profile">
+        <img src="img/profile.jpg" alt="profile">
+      </div>
+    </div>
+  </nav>
+
+  <section class="portfolio-hero container">
+    <h1>Kategori: <span class="highlight">Motion</span></h1>
+  </section>
+
+  <section class="portfolio-grid" id="motion-gallery"></section>
+  <a href="portofolio.html" class="btn-back">← Back to Portfolio</a>
+
+  
+
+  <div id="lightbox" onclick="closeLightbox()"></div>
+
+<style>
+/* === GRID SETUP === */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 40px;
+}
+
+/* === ITEM DASAR === */
+.portfolio-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #000;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+.portfolio-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,255,255,0.25);
+}
+
+/* === LANDSCAPE dan PORTRAIT SIZE === */
+.portfolio-item.landscape {
+  grid-column: span 2;
+  aspect-ratio: 16 / 9;
+}
+.portfolio-item.portrait {
+  grid-column: span 1;
+  aspect-ratio: 9 / 16;
+}
+
+/* === MEDIA RESPONSIVE === */
+@media (max-width: 768px) {
+  .portfolio-item.landscape {
+    grid-column: span 1;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* === THUMBNAIL dan VIDEO PREVIEW === */
+.portfolio-item img,
+.portfolio-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+}
+.portfolio-item video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+/* === PLAY OVERLAY === */
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+  font-size: 48px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.portfolio-item:hover .play-overlay {
+  opacity: 1;
+}
+
+/* === FULLSCREEN VIDEO MODAL === */
+#videoModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+  transition: all 0.4s ease;
+  z-index: 9999;
+}
+#videoModal.active {
+  opacity: 0;
+  pointer-events: all;
+}
+#videoModal.active.show {
+  opacity: 1;
+  transform: scale(1);
+}
+#videoModal .video-wrapper {
+  position: relative;
+  width: 90%;
+  max-width: 900px;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0,255,255,0.3);
+  animation: fadeZoom 0.4s ease;
+}
+#videoModal iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+#videoModal .close-btn {
+  position: absolute;
+  top: -45px;
+  right: 0;
+  color: #fff;
+  font-size: 36px;
+  cursor: pointer;
+  background: rgba(0,0,0,0.6);
+  padding: 6px 12px;
+  border-radius: 10px;
+  transition: 0.3s;
+  backdrop-filter: blur(4px);
+}
+#videoModal .close-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+@keyframes fadeZoom {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const gallery = document.getElementById('motion-gallery');
+
+  const videos = [
+    { id: '--OSJYYBxso', aspect: 'landscape' },
+    { id: '_r1TKNySlo4', aspect: 'portrait' },
+    { id: '8Kk2TimF0I4', aspect: 'landscape' },
+    { id: 'vy6WwBDWaeM', aspect: 'portrait' },
+    { id: 'Lq9P6K9yqt0', aspect: 'landscape' },
+    { id: 'NdkrGQmCvv0', aspect: 'portrait' },
+    { id: 'VuZwqTdEUeM', aspect: 'landscape' },
+    { id: 'qlUG8F9uVgk', aspect: 'portrait' },
+    { id: '3JZ_D3ELwOQ', aspect: 'landscape' },
+    { id: 'Wch3gJG2GJ4', aspect: 'portrait' },
+    { id: 'RgKAFK5djSk', aspect: 'landscape' },
+    { id: 'uU3VfA-bUQs', aspect: 'portrait' },
+    { id: 'FwHBc7-FOkA', aspect: 'landscape' },
+    { id: '2vjPBrBU-TM', aspect: 'portrait' },
+    { id: 'mWRsgZuwf_8', aspect: 'landscape' },
+    { id: 'y6120QOlsfU', aspect: 'portrait' },
+    { id: 'E7wJTI-1dvQ', aspect: 'landscape' },
+    { id: 'jNQXAC9IVRw', aspect: 'portrait' },
+    { id: 'HgzGwKwLmgM', aspect: 'landscape' },
+    { id: 'ktvTqknDobU', aspect: 'portrait' },
+    { id: '60ItHLz5WEA', aspect: 'landscape' },
+    { id: 'D5drYkLiLI8', aspect: 'portrait' },
+    { id: 'a3Z7zEc7AXQ', aspect: 'landscape' },
+    { id: 'LRLdhFVzqt4', aspect: 'portrait' },
+    { id: 'iW-uKirKL9Y', aspect: 'landscape' }
+  ];
+
+  videos.forEach(video => {
+    const item = document.createElement('div');
+    item.classList.add('portfolio-item', video.aspect);
+    item.innerHTML = `
+      <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="Video Thumbnail">
+      <div class="play-overlay">▶</div>
+    `;
+    gallery.appendChild(item);
+
+    let clickCount = 0;
+    item.addEventListener('click', () => {
+      clickCount++;
+      setTimeout(() => (clickCount = 0), 300);
+      if (clickCount === 2) openVideoModal(video.id);
+    });
+  });
+
+  const modal = document.createElement('div');
+  modal.id = 'videoModal';
+  modal.innerHTML = `
+    <div class="video-wrapper">
+      <span class="close-btn">&times;</span>
+      <iframe id="videoFrame" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  modal.querySelector('.close-btn').addEventListener('click', closeVideoModal);
+  modal.addEventListener('click', e => {
+    if (e.target === modal) closeVideoModal();
+  });
+
+  function openVideoModal(id) {
+    const iframe = modal.querySelector('#videoFrame');
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+    modal.classList.add('active');
+    setTimeout(() => modal.classList.add('show'), 10);
+  }
+
+  function closeVideoModal() {
+    const iframe = modal.querySelector('#videoFrame');
+    modal.classList.remove('show');
+    setTimeout(() => {
+      iframe.src = '';
+      modal.classList.remove('active');
+    }, 300);
+  }
+});
+</script>
